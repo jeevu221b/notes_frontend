@@ -1,0 +1,5 @@
+/* app.css */
+.hover-effect:hover {
+  color: green;
+  cursor: pointer;
+}
