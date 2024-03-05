@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ThemeContext from './ThemeContext'; // Import the context
 
 function ThemeProvider({ children }) {
@@ -11,7 +11,7 @@ function ThemeProvider({ children }) {
         if (token) {
             updatetAuthToken(token)
             setIsLoggedIn(true)
-            console.info("User is logged in")
+            // console.info("User is logged in")
         }
     }, [])
 
@@ -28,15 +28,15 @@ function ThemeProvider({ children }) {
         setIsLoggedIn(false)
     }
 
-    const setAuthToken = (token) => {
-        localStorage.setItem("token", token);
+    const setAuthToken = async (token) => {
+        await localStorage.setItem("token", token);
         updatetAuthToken(token)
         setIsLoggedIn(true)
     }
 
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme, authToken, isLoggedIn, setAuthToken, clearAuthToken }}>
-            {children}  
+            {children}
         </ThemeContext.Provider>
     );
 }

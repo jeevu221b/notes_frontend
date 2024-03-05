@@ -1,79 +1,47 @@
-import React, { useContext, useState } from 'react';
-import './App.css';
-import {
-  createBrowserRouter,
-} from "react-router-dom";
-
-import { LoginForm } from './Login';
-import {
-  RouterProvider,
-} from "react-router-dom";
+import React, { useContext } from 'react';
+import { Navigate, Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 import ThemeContext from './ThemeContext';
-import { useLocation } from 'react-router-dom';
-
+import View from './View';
+import Create from './Create';
+import { Edit } from './Edit';
+import { LoginForm } from './Login';
+import { NavBar } from './NavBar';
+import { SignUpForm } from './Signup';
 
 const App = (props) => {
-  const { theme, toggleTheme, isLoggedIn } = useContext(ThemeContext);
-
-
-
-  const View = () => {
-
-    return <div> VIEW</div>
-
-  }
-
+  const { isLoggedIn } = useContext(ThemeContext);
   const Delete = () => {
+    return <div> Del</div>;
+  };
 
-    return <div> Del</div>
+  const authRoutes = [
+    { path: "/", element: <View /> },
+    { path: "/view", element: <View /> },
+    { path: "/delete", element: <Delete /> },
+    { path: "/create", element: <Create /> },
+    { path: "/edit/:id", element: <Edit /> },
+    { path: "*", element: <Navigate to="/view" /> },
+  ];
 
-  }
-
-
-  const authRoutes = [{
-    path: "/",
-    element: <LoginForm />
-  },
-
-  {
-
-    path: "/view",
-    element: <View />
-  }, {
-    path: "/delete",
-    element: <Delete />
-  },
-  {
-    path: "*",
-    element: <div>Home Page of Auth route. You are logged in </div>
-  }
-  ]
-
-
-  const nonAuthRoute = [{
-    path: "/",
-    element: <LoginForm />
-  }, {
-    path: "/signup",
-    element: <div>Sign up</div>
-  },
-  {
-    path: "*",
-    element: <LoginForm />
-  }
-  ]
-
-
-  const router = createBrowserRouter(
-    isLoggedIn ? authRoutes : nonAuthRoute
-  )
-
-
+  const nonAuthRoute = [
+    { path: "/", element: <LoginForm /> },
+    { path: "/signup", element: <SignUpForm /> },
+    { path: "*", element: <Navigate to="/" /> },
+  ];
 
   return (
-    <RouterProvider router={router} />
-  )
+    <Router>
+      {isLoggedIn && (
+        <div style={{ width: "80%", backgroundColor: "grey", padding: 10, marginBottom: 50 }}>
+          <NavBar />
+        </div>
+      )}
 
+      <Routes>
+        {isLoggedIn ? authRoutes.map((route) => <Route key={route.path} {...route} />) : nonAuthRoute.map((route) => <Route key={route.path} {...route} />)}
+      </Routes>
+    </Router>
+  );
+};
 
-}
 export { App };

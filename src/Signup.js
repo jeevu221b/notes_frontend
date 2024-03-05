@@ -1,12 +1,28 @@
 import { useState } from "react"
+import { apiRequest, backendRoutes } from "./utill"
+import { useNavigate } from "react-router-dom"
+
 
 const SignUpForm = () => {
+    const navigate = useNavigate()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(username, password)
+        signup(username, password)
+
+    }
+
+    const signup = async (username, password) => {
+        try {
+            await apiRequest(backendRoutes.SIGN_UP.url, backendRoutes.SIGN_UP.method, { username, password })
+            navigate("/login")
+
+        } catch (error) {
+            alert(error)
+
+        }
 
     }
 
@@ -21,9 +37,8 @@ const SignUpForm = () => {
                 Password
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </label>
-            <br></br>
+            <br />
             <button type="submit">SignUp</button>
-            {/* <button type='button'>Login</button>     */}
 
         </form >
     )
